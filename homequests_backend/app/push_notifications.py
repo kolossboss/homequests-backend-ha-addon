@@ -190,13 +190,17 @@ class APNsClient:
         return token
 
     def _load_private_key(self) -> str | None:
+        inline = (settings.apns_private_key or "").strip()
+        if inline:
+            return inline.replace("\\n", "\n")
+
         path = (settings.apns_private_key_path or "").strip()
-        if path:
-            key_path = Path(path)
-            if key_path.exists():
-                return key_path.read_text(encoding="utf-8")
-            logger.warning("APNs Key-Datei nicht gefunden unter APNS_PRIVATE_KEY_PATH=%s", path)
-        return None
+        if not path:
+            return None
+        key_path = Path(path)
+        if not key_path.exists():
+            return None
+        return key_path.read_text(encoding="utf-8")
 
 
 _apns_client = APNsClient()

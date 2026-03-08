@@ -71,6 +71,8 @@ def _apns_configured() -> bool:
         return False
     if not app_settings.apns_team_id or not app_settings.apns_key_id:
         return False
+    if app_settings.apns_private_key and app_settings.apns_private_key.strip():
+        return True
     if app_settings.apns_private_key_path and Path(app_settings.apns_private_key_path).exists():
         return True
     return False
