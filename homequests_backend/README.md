@@ -36,6 +36,12 @@ Optional (haeufig):
 - `apns_private_key` (Inline `.p8` Inhalt) nur als Ausnahme verwenden
 - Das Add-on mountet `/ssl` read-only
 
+Vollstaendige APNs-Schritt-fuer-Schritt-Anleitung:
+
+- [HomeQuests Backend: APNs Remote Push Anleitung](https://github.com/kolossboss/HomeQuests-backend/blob/main/backend/docs/apns-remote-push.md)
+
+Empfehlung: Neben APNs den Kanal `home_assistant` fuer Benachrichtigungen konfigurieren, damit Meldungen zusaetzlich direkt in Home Assistant ankommen.
+
 ## Secret-Schluessel
 
 - `secret_key`: Signatur fuer JWT/Session, immer setzen und stabil halten.

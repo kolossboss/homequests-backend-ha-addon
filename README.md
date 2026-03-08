@@ -57,6 +57,14 @@ apns_private_key_path: ""
 
 Empfehlung: Nur `apns_private_key_path` nutzen und `apns_private_key` leer lassen.
 
+## APNs Anleitung (Hauptrepo)
+
+Die vollstaendige APNs-Einrichtung ist hier dokumentiert:
+
+- [HomeQuests Backend: APNs Remote Push Anleitung](https://github.com/kolossboss/HomeQuests-backend/blob/main/backend/docs/apns-remote-push.md)
+
+Empfehlung: APNs fuer iOS Push nutzen und zusaetzlich den Home-Assistant-Notify-Kanal (`home_assistant`) aktivieren, damit Benachrichtigungen auch in HA robust sichtbar bleiben.
+
 ## Erreichbarkeit nach dem Start
 
 - WebUI: `http://HOME_ASSISTANT_HOST:8010/`
