@@ -42,6 +42,21 @@ apns_private_key: ""
 apns_private_key_path: ""
 ```
 
+## Sicherheits-Hinweise zu Schluesseln
+
+- `secret_key`:
+  Signierschluessel fuer Login/JWT. Pflichtwert, lang und zufaellig waehlen.
+- `secret_encryption_key`:
+  Optionaler separater Schluessel fuer DB-Secrets (z. B. gespeicherte HA-Tokens).
+  Wenn leer, faellt das Backend auf `secret_key` zurueck.
+- `apns_private_key`:
+  Inline-Inhalt der Apple `.p8` Datei (funktioniert, aber nur Notfalloption).
+- `apns_private_key_path`:
+  Empfohlener Weg. Pfad zur `.p8` Datei im Dateisystem, z. B.
+  `/ssl/homequests/AuthKey_ABC123.p8`.
+
+Empfehlung: Nur `apns_private_key_path` nutzen und `apns_private_key` leer lassen.
+
 ## Erreichbarkeit nach dem Start
 
 - WebUI: `http://HOME_ASSISTANT_HOST:8010/`

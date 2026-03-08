@@ -32,9 +32,15 @@ Optional (haeufig):
 
 ## APNs Hinweise
 
-- Entweder `apns_private_key` direkt setzen
-- Oder `apns_private_key_path` auf eine Datei unter `/ssl/...` setzen
+- Empfohlen: `apns_private_key_path` auf eine Datei unter `/ssl/...` setzen
+- `apns_private_key` (Inline `.p8` Inhalt) nur als Ausnahme verwenden
 - Das Add-on mountet `/ssl` read-only
+
+## Secret-Schluessel
+
+- `secret_key`: Signatur fuer JWT/Session, immer setzen und stabil halten.
+- `secret_encryption_key`: Optionaler separater Verschluesselungsschluessel fuer gespeicherte Secrets.
+  Wenn leer, wird automatisch `secret_key` verwendet.
 
 ## Erreichbarkeit
 
