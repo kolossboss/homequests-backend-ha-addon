@@ -40,6 +40,7 @@ apns_private_key_path: ""
 - `database_url`:
   Optional. Wenn leer, wird automatisch `sqlite:////data/homequests.db` verwendet.
   Hinweis: Werte mit Host `db` sind fuer Docker Compose gedacht und im HA Add-on normalerweise nicht erreichbar.
+  Wenn eine externe DB nicht erreichbar ist, faellt das Add-on automatisch auf SQLite zurueck.
 
 ## Benachrichtigungen
 

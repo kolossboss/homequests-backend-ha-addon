@@ -19,6 +19,7 @@ Optional (haeufig):
 
 - `database_url` fuer externe DB (z. B. PostgreSQL)
   Hinweis: Host `db` ist fuer Docker Compose gedacht und im HA Add-on normalerweise nicht erreichbar.
+  Wenn die externe DB nicht erreichbar ist, faellt das Add-on automatisch auf SQLite zurueck.
 - APNs-Felder (`apns_enabled`, `apns_team_id`, `apns_key_id`, `apns_bundle_id`, `apns_private_key_path`)
 
 ## Empfohlener Start

@@ -23,6 +23,25 @@ json_bool() {
   fi
 }
 
+can_connect_database() {
+  local url="$1"
+  DB_URL="${url}" python3 - <<'PY'
+import os
+import sys
+
+from sqlalchemy import create_engine, text
+
+url = os.environ["DB_URL"]
+
+try:
+    engine = create_engine(url, pool_pre_ping=True)
+    with engine.connect() as conn:
+        conn.execute(text("SELECT 1"))
+except Exception:
+    sys.exit(1)
+PY
+}
+
 SECRET_KEY="$(json_string '.secret_key')"
 DATABASE_URL="$(json_string '.database_url')"
 APNS_ENABLED="$(json_bool '.apns_enabled')"
@@ -49,6 +68,14 @@ if [[ "${DATABASE_URL}" == *"@db:"* ]]; then
   echo "[WARN] DATABASE_URL verweist auf Host 'db'. In Home Assistant Add-ons ist dieser Host normalerweise nicht erreichbar."
   echo "[WARN] Fallback auf lokale SQLite-Datenbank /data/homequests.db"
   DATABASE_URL="sqlite:////data/homequests.db"
+fi
+
+if [[ "${DATABASE_URL}" != sqlite:* ]]; then
+  export PGCONNECT_TIMEOUT=5
+  if ! can_connect_database "${DATABASE_URL}"; then
+    echo "[WARN] Externe DATABASE_URL ist nicht erreichbar. Fallback auf lokale SQLite-Datenbank /data/homequests.db"
+    DATABASE_URL="sqlite:////data/homequests.db"
+  fi
 fi
 
 export SECRET_KEY
