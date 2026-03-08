@@ -40,7 +40,7 @@ Vollstaendige APNs-Schritt-fuer-Schritt-Anleitung:
 
 - [HomeQuests Backend: APNs Remote Push Anleitung](https://github.com/kolossboss/HomeQuests-backend/blob/main/backend/docs/apns-remote-push.md)
 
-Empfehlung: Neben APNs den Kanal `home_assistant` fuer Benachrichtigungen konfigurieren, damit Meldungen zusaetzlich direkt in Home Assistant ankommen.
+Empfehlung: Statt APNs den im Backend integrierten HomeQuests-Kanal `home_assistant` fuer Benachrichtigungen nutzen.
 
 ## Secret-Schluessel
 

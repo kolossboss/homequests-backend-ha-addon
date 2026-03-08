@@ -63,7 +63,7 @@ Die vollstaendige APNs-Einrichtung ist hier dokumentiert:
 
 - [HomeQuests Backend: APNs Remote Push Anleitung](https://github.com/kolossboss/HomeQuests-backend/blob/main/backend/docs/apns-remote-push.md)
 
-Empfehlung: APNs fuer iOS Push nutzen und zusaetzlich den Home-Assistant-Notify-Kanal (`home_assistant`) aktivieren, damit Benachrichtigungen auch in HA robust sichtbar bleiben.
+Empfehlung: Statt Apple Push Notification (APNs) die im Backend integrierte Home-Assistant-Benachrichtigungsfunktion von HomeQuests (Kanal `home_assistant`) nutzen.
 
 ## Erreichbarkeit nach dem Start
 
