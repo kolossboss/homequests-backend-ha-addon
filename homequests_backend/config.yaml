@@ -18,36 +18,16 @@ webui: http://[HOST]:[PORT:8000]/
 map:
   - "ssl:ro"
 options:
-  app_name: HomeQuests API
   secret_key: ""
-  secret_encryption_key: ""
   database_url: ""
-  access_token_expire_minutes: 525600
-  cors_allow_origins: "*"
-  auth_cookie_secure: false
-  sse_allow_query_token: false
-  penalty_worker_enabled: true
-  penalty_worker_interval_seconds: 60
-  push_worker_enabled: true
-  push_worker_interval_seconds: 60
   apns_enabled: false
   apns_team_id: ""
   apns_key_id: ""
   apns_bundle_id: swapps.HomeQuests
   apns_private_key_path: ""
 schema:
-  app_name: str?
   secret_key: password
-  secret_encryption_key: password?
   database_url: str?
-  access_token_expire_minutes: int(1,)
-  cors_allow_origins: str?
-  auth_cookie_secure: bool
-  sse_allow_query_token: bool
-  penalty_worker_enabled: bool
-  penalty_worker_interval_seconds: int(15,)
-  push_worker_enabled: bool
-  push_worker_interval_seconds: int(15,)
   apns_enabled: bool
   apns_team_id: str?
   apns_key_id: str?

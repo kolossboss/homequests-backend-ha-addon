@@ -18,9 +18,6 @@ Pflicht:
 Optional (haeufig):
 
 - `database_url` fuer externe DB (z. B. PostgreSQL)
-- `cors_allow_origins` (`*` oder CSV-Liste)
-- `auth_cookie_secure`
-- `sse_allow_query_token`
 - APNs-Felder (`apns_enabled`, `apns_team_id`, `apns_key_id`, `apns_bundle_id`, `apns_private_key_path`)
 
 ## Empfohlener Start
@@ -45,13 +42,12 @@ Alternativ:
 - Vollstaendige APNs-Schritt-fuer-Schritt-Anleitung:
   [HomeQuests Backend: APNs Remote Push Anleitung](https://github.com/kolossboss/HomeQuests-backend/blob/main/docs/apns-remote-push.md)
 
-## Secret-Schluessel
+## Wichtige Optionen
 
 - `secret_key`: Signatur fuer JWT/Session, immer setzen und stabil halten.
   Im Terminal erzeugen:
   `openssl rand -base64 48`
-- `secret_encryption_key`: Optionaler separater Verschluesselungsschluessel fuer gespeicherte Secrets.
-  Wenn leer, wird automatisch `secret_key` verwendet.
+- `database_url`: Optional. Wenn leer, wird `sqlite:////data/homequests.db` verwendet.
 
 ## Erreichbarkeit
 

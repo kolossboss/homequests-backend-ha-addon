@@ -23,43 +23,8 @@ json_bool() {
   fi
 }
 
-json_int() {
-  local path="$1"
-  local default_value="$2"
-  jq -r "${path} // ${default_value}" "${OPTIONS_FILE}"
-}
-
-normalize_cors_allow_origins() {
-  local raw="$1"
-  local trimmed
-  trimmed="$(printf '%s' "$raw" | sed -E 's/^[[:space:]]+|[[:space:]]+$//g')"
-
-  if [[ -z "${trimmed}" || "${trimmed}" == "*" ]]; then
-    echo '["*"]'
-    return
-  fi
-
-  if [[ "${trimmed}" == \[*\] ]] && printf '%s' "${trimmed}" | jq -e 'type == "array"' >/dev/null 2>&1; then
-    echo "${trimmed}"
-    return
-  fi
-
-  printf '%s' "${trimmed}" | jq -R 'split(",") | map(gsub("^\\s+|\\s+$"; "")) | map(select(length > 0))'
-}
-
-APP_NAME="$(json_string '.app_name')"
 SECRET_KEY="$(json_string '.secret_key')"
-SECRET_ENCRYPTION_KEY="$(json_string '.secret_encryption_key')"
 DATABASE_URL="$(json_string '.database_url')"
-ACCESS_TOKEN_EXPIRE_MINUTES="$(json_int '.access_token_expire_minutes' '525600')"
-CORS_ALLOW_ORIGINS_RAW="$(json_string '.cors_allow_origins')"
-CORS_ALLOW_ORIGINS="$(normalize_cors_allow_origins "${CORS_ALLOW_ORIGINS_RAW}")"
-AUTH_COOKIE_SECURE="$(json_bool '.auth_cookie_secure')"
-SSE_ALLOW_QUERY_TOKEN="$(json_bool '.sse_allow_query_token')"
-PENALTY_WORKER_ENABLED="$(json_bool '.penalty_worker_enabled')"
-PENALTY_WORKER_INTERVAL_SECONDS="$(json_int '.penalty_worker_interval_seconds' '60')"
-PUSH_WORKER_ENABLED="$(json_bool '.push_worker_enabled')"
-PUSH_WORKER_INTERVAL_SECONDS="$(json_int '.push_worker_interval_seconds' '60')"
 APNS_ENABLED="$(json_bool '.apns_enabled')"
 APNS_TEAM_ID="$(json_string '.apns_team_id')"
 APNS_KEY_ID="$(json_string '.apns_key_id')"
@@ -80,18 +45,8 @@ if [[ -z "${DATABASE_URL}" ]]; then
   DATABASE_URL="sqlite:////data/homequests.db"
 fi
 
-export APP_NAME
 export SECRET_KEY
-export SECRET_ENCRYPTION_KEY
 export DATABASE_URL
-export ACCESS_TOKEN_EXPIRE_MINUTES
-export CORS_ALLOW_ORIGINS
-export AUTH_COOKIE_SECURE
-export SSE_ALLOW_QUERY_TOKEN
-export PENALTY_WORKER_ENABLED
-export PENALTY_WORKER_INTERVAL_SECONDS
-export PUSH_WORKER_ENABLED
-export PUSH_WORKER_INTERVAL_SECONDS
 export APNS_ENABLED
 export APNS_TEAM_ID
 export APNS_KEY_ID

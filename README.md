@@ -22,18 +22,8 @@ Dieses Repository enthaelt das HomeQuests Backend als Home Assistant Add-on.
 ## Beispielkonfiguration
 
 ```yaml
-app_name: HomeQuests API
 secret_key: ""
-secret_encryption_key: ""
 database_url: ""
-access_token_expire_minutes: 525600
-cors_allow_origins: "*"
-auth_cookie_secure: false
-sse_allow_query_token: false
-penalty_worker_enabled: true
-penalty_worker_interval_seconds: 60
-push_worker_enabled: true
-push_worker_interval_seconds: 60
 apns_enabled: false
 apns_team_id: ""
 apns_key_id: ""
@@ -41,20 +31,14 @@ apns_bundle_id: swapps.HomeQuests
 apns_private_key_path: ""
 ```
 
-## Sicherheits-Hinweise zu Schluesseln
+## Wichtige Optionen
 
 - `secret_key`:
   Signierschluessel fuer Login/JWT. Pflichtwert, lang und zufaellig waehlen.
   Im Terminal erzeugen:
   `openssl rand -base64 48`
-- `secret_encryption_key`:
-  Optionaler separater Schluessel fuer DB-Secrets (z. B. gespeicherte HA-Tokens).
-  Wenn leer, faellt das Backend auf `secret_key` zurueck.
-- `apns_private_key_path`:
-  Empfohlener Weg. Pfad zur `.p8` Datei im Dateisystem, z. B.
-  `/ssl/homequests/AuthKey_ABC123.p8`.
-
-APNs im Add-on ist nur noch ueber `apns_private_key_path` vorgesehen.
+- `database_url`:
+  Optional. Wenn leer, wird automatisch `sqlite:////data/homequests.db` verwendet.
 
 ## Benachrichtigungen
 
