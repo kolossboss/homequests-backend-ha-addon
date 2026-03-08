@@ -43,7 +43,7 @@ Alternativ:
 - APNs im Add-on nur ueber `apns_private_key_path` als Datei unter `/ssl/...`.
 - Das Add-on mountet `/ssl` read-only.
 - Vollstaendige APNs-Schritt-fuer-Schritt-Anleitung:
-  [HomeQuests Backend: APNs Remote Push Anleitung](https://github.com/kolossboss/HomeQuests-backend/blob/main/backend/docs/apns-remote-push.md)
+  [HomeQuests Backend: APNs Remote Push Anleitung](https://github.com/kolossboss/HomeQuests-backend/blob/main/docs/apns-remote-push.md)
 
 ## Secret-Schluessel
 
