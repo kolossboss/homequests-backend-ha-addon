@@ -1,0 +1,82 @@
+name: Sync Backend Source
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [homequests_backend_updated]
+
+concurrency:
+  group: sync-backend-source
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync backend files from source repository
+        id: sync
+        run: |
+          set -euo pipefail
+
+          git clone --depth 1 --branch main https://github.com/kolossboss/HomeQuests-backend.git /tmp/homequests-backend-src
+          BACKEND_SHA="$(git -C /tmp/homequests-backend-src rev-parse HEAD)"
+          echo "backend_sha=${BACKEND_SHA}" >> "$GITHUB_OUTPUT"
+
+          rsync -a --delete /tmp/homequests-backend-src/app/ homequests_backend/app/
+          cp /tmp/homequests-backend-src/requirements.txt homequests_backend/requirements.txt
+
+          if git diff --quiet -- homequests_backend/app homequests_backend/requirements.txt; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          cfg = Path("homequests_backend/config.yaml")
+          text = cfg.read_text(encoding="utf-8")
+          match = re.search(r'^version:\s*"(\d+)\.(\d+)\.(\d+)"\s*$', text, flags=re.MULTILINE)
+          if not match:
+              raise RuntimeError("Konnte version in homequests_backend/config.yaml nicht lesen")
+          major, minor, patch = map(int, match.groups())
+          new_version = f"{major}.{minor}.{patch + 1}"
+          text = re.sub(r'^version:\s*"[^"]+"\s*$', f'version: "{new_version}"', text, count=1, flags=re.MULTILINE)
+          cfg.write_text(text, encoding="utf-8")
+          print(new_version)
+          PY
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Create pull request
+        if: steps.sync.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(sync): update backend sources from HomeQuests-backend"
+          title: "chore(sync): backend sources aktualisieren"
+          body: |
+            Automatischer Sync aus `kolossboss/HomeQuests-backend`.
+
+            Quelle:
+            - Repo: `kolossboss/HomeQuests-backend`
+            - Commit: `${{ steps.sync.outputs.backend_sha }}`
+
+            Geaenderte Bereiche:
+            - `homequests_backend/app/**`
+            - `homequests_backend/requirements.txt`
+            - `homequests_backend/config.yaml` (Version automatisch erhoeht)
+          branch: "automation/backend-sync"
+          delete-branch: true
+          labels: |
+            automated
+            sync
