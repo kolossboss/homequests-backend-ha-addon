@@ -30,16 +30,20 @@ Optional (haeufig):
 3. WebUI testen
 4. Erst danach optional auf externe Postgres-DB umstellen
 
-## APNs Hinweise
+## Benachrichtigungen
 
-- Empfohlen: `apns_private_key_path` auf eine Datei unter `/ssl/...` setzen
-- Das Add-on mountet `/ssl` read-only
+Empfohlen:
 
-Vollstaendige APNs-Schritt-fuer-Schritt-Anleitung:
+- Benachrichtigungen ueber Home Assistant nutzen (`home_assistant`).
+- In der HomeQuests WebUI konfigurierbar (HA Base URL, Token, Notify-Service, SSL-Optionen).
 
-- [HomeQuests Backend: APNs Remote Push Anleitung](https://github.com/kolossboss/HomeQuests-backend/blob/main/backend/docs/apns-remote-push.md)
+Alternativ:
 
-Empfehlung: Statt APNs den im Backend integrierten HomeQuests-Kanal `home_assistant` fuer Benachrichtigungen nutzen.
+- Apple Push Notification (APNs) nutzen. Erfordert einen Apple Developer Account.
+- APNs im Add-on nur ueber `apns_private_key_path` als Datei unter `/ssl/...`.
+- Das Add-on mountet `/ssl` read-only.
+- Vollstaendige APNs-Schritt-fuer-Schritt-Anleitung:
+  [HomeQuests Backend: APNs Remote Push Anleitung](https://github.com/kolossboss/HomeQuests-backend/blob/main/backend/docs/apns-remote-push.md)
 
 ## Secret-Schluessel
 

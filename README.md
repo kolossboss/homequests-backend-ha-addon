@@ -56,13 +56,20 @@ apns_private_key_path: ""
 
 APNs im Add-on ist nur noch ueber `apns_private_key_path` vorgesehen.
 
-## APNs Anleitung (Hauptrepo)
+## Benachrichtigungen
 
-Die vollstaendige APNs-Einrichtung ist hier dokumentiert:
+Empfohlen:
 
-- [HomeQuests Backend: APNs Remote Push Anleitung](https://github.com/kolossboss/HomeQuests-backend/blob/main/backend/docs/apns-remote-push.md)
+- Benachrichtigungen ueber Home Assistant nutzen (`home_assistant`).
+- In der HomeQuests WebUI konfigurierbar (HA Base URL, Token, Notify-Service, SSL-Optionen).
 
-Empfehlung: Statt Apple Push Notification (APNs) die im Backend integrierte Home-Assistant-Benachrichtigungsfunktion von HomeQuests (Kanal `home_assistant`) nutzen.
+Alternativ:
+
+- Apple Push Notification (APNs) nutzen. Erfordert einen Apple Developer Account.
+- APNs im Add-on nur ueber `apns_private_key_path` als Datei unter `/ssl/...`.
+- Das Add-on mountet `/ssl` read-only.
+- Vollstaendige APNs-Schritt-fuer-Schritt-Anleitung:
+  [HomeQuests Backend: APNs Remote Push Anleitung](https://github.com/kolossboss/HomeQuests-backend/blob/main/backend/docs/apns-remote-push.md)
 
 ## Erreichbarkeit nach dem Start
 
