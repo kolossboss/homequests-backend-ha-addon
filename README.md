@@ -2,37 +2,67 @@
 
 Dieses Repository enthaelt das HomeQuests Backend als Home Assistant Add-on.
 
-Wichtig: Vor dem Push die Platzhalter-URL `REPLACE_ME` in
-`repository.yaml` und `homequests_backend/config.yaml` auf dein GitHub-Repo setzen.
+## Verwandte Projekte
 
-## Enthaltenes Add-on
+- iOS App: [HomeQuests im App Store](https://apps.apple.com/de/app/homequests/id6759489304)
+- Haupt-Backend-Repository: [kolossboss/HomeQuests-backend](https://github.com/kolossboss/HomeQuests-backend)
+- Home Assistant Integration (HACS): [kolossboss/homequests-backend-ha](https://github.com/kolossboss/homequests-backend-ha)
 
-- `homequests_backend`: HomeQuests API + WebUI
+## Add-on in Home Assistant hinzufuegen
 
-## Installation in Home Assistant
-
-1. Home Assistant -> **Einstellungen** -> **Add-ons** -> **Add-on Store**
-2. Oben rechts auf die drei Punkte -> **Repositories**
-3. URL dieses GitHub-Repositories einfuegen
-4. Das Add-on **HomeQuests Backend** oeffnen
-5. **Installieren**
-6. Unter **Konfiguration** mindestens `secret_key` setzen
+1. Home Assistant -> `Einstellungen` -> `Add-ons` -> `Add-on Store`
+2. Oben rechts `...` -> `Repositories`
+3. Diese URL einfuegen:
+   `https://github.com/kolossboss/homequests-backend-ha-addon`
+4. Add-on `HomeQuests Backend` oeffnen
+5. `Installieren`
+6. Unter `Konfiguration` mindestens `secret_key` setzen
 7. Add-on starten
 
-## Nach dem Start
+## Beispielkonfiguration
+
+```yaml
+app_name: HomeQuests API
+secret_key: "bitte-einen-langen-secret-key-verwenden"
+secret_encryption_key: ""
+database_url: ""
+access_token_expire_minutes: 525600
+cors_allow_origins: "*"
+auth_cookie_secure: false
+sse_allow_query_token: false
+penalty_worker_enabled: true
+penalty_worker_interval_seconds: 60
+push_worker_enabled: true
+push_worker_interval_seconds: 60
+apns_enabled: false
+apns_team_id: ""
+apns_key_id: ""
+apns_bundle_id: swapps.HomeQuests
+apns_private_key: ""
+apns_private_key_path: ""
+```
+
+## Erreichbarkeit nach dem Start
 
 - WebUI: `http://HOME_ASSISTANT_HOST:8010/`
-- API Docs: `http://HOME_ASSISTANT_HOST:8010/docs`
+- API-Doku: `http://HOME_ASSISTANT_HOST:8010/docs`
 - Health: `http://HOME_ASSISTANT_HOST:8010/health`
 
-## GitHub anlegen (lokal)
+## Standard-Datenbank
 
-```bash
-cd backend-HA-app
-git init
-git add .
-git commit -m "Initial Home Assistant Add-on for HomeQuests backend"
-# Danach auf GitHub neues Repo erstellen und remote setzen:
-# git remote add origin git@github.com:<USER>/<REPO>.git
-# git push -u origin main
-```
+Wenn `database_url` leer bleibt, wird automatisch SQLite genutzt:
+
+`sqlite:////data/homequests.db`
+
+## Vollautomatisch eingerichtet
+
+- PRs in `main` werden automatisch auf `auto-merge (squash)` gestellt.
+- Docker-Image wird automatisch in GHCR gebaut und bei `main`/Tags veroeffentlicht.
+- Basis-CI prueft YAML und Startskript.
+
+## Container-Image
+
+- Registry: `ghcr.io/kolossboss/homequests-backend-ha-addon`
+- `latest`: aktueller Stand von `main`
+- `sha-*`: commitbasierte Tags
+- `v*`: Release-Tags

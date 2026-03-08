@@ -2,7 +2,7 @@ name: HomeQuests Backend
 version: "0.1.0"
 slug: homequests_backend
 description: HomeQuests API und WebUI als Home Assistant Add-on
-url: https://github.com/REPLACE_ME/homequests-backend-ha-addon
+url: https://github.com/kolossboss/homequests-backend-ha-addon
 startup: application
 boot: auto
 init: false

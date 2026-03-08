@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate YAML and shell script
+        run: |
+          python -m pip install --upgrade pip pyyaml
+          python - <<'PY'
+          import yaml
+          from pathlib import Path
+
+          files = [
+              Path("repository.yaml"),
+              Path("homequests_backend/config.yaml"),
+              Path("homequests_backend/build.yaml"),
+          ]
+
+          for f in files:
+              with f.open("r", encoding="utf-8") as handle:
+                  yaml.safe_load(handle)
+          print("YAML valid")
+          PY
+          bash -n homequests_backend/run.sh

@@ -1,0 +1,26 @@
+name: PR Auto-Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  enable-automerge:
+    if: github.event.pull_request.draft == false && github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Enable auto-merge for same-repo PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          if [ "$HEAD_REPO" != "$BASE_REPO" ]; then
+            echo "Fork PR erkannt - Auto-Merge wird aus Sicherheitsgruenden uebersprungen."
+            exit 0
+          fi
+          gh pr merge "$PR_NUMBER" --auto --squash --delete-branch
