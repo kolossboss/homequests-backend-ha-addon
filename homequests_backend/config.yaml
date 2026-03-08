@@ -1,0 +1,57 @@
+name: HomeQuests Backend
+version: "0.1.0"
+slug: homequests_backend
+description: HomeQuests API und WebUI als Home Assistant Add-on
+url: https://github.com/REPLACE_ME/homequests-backend-ha-addon
+startup: application
+boot: auto
+init: false
+arch:
+  - amd64
+  - aarch64
+  - armv7
+ports:
+  8000/tcp: 8010
+ports_description:
+  8000/tcp: HomeQuests API und WebUI
+webui: http://[HOST]:[PORT:8000]/
+map:
+  - "ssl:ro"
+options:
+  app_name: HomeQuests API
+  secret_key: change-this-secret-key-please
+  secret_encryption_key: ""
+  database_url: ""
+  access_token_expire_minutes: 525600
+  cors_allow_origins: "*"
+  auth_cookie_secure: false
+  sse_allow_query_token: false
+  penalty_worker_enabled: true
+  penalty_worker_interval_seconds: 60
+  push_worker_enabled: true
+  push_worker_interval_seconds: 60
+  apns_enabled: false
+  apns_team_id: ""
+  apns_key_id: ""
+  apns_bundle_id: swapps.HomeQuests
+  apns_private_key: ""
+  apns_private_key_path: ""
+schema:
+  app_name: str?
+  secret_key: str
+  secret_encryption_key: str?
+  database_url: str?
+  access_token_expire_minutes: int(1,)
+  cors_allow_origins: str?
+  auth_cookie_secure: bool
+  sse_allow_query_token: bool
+  penalty_worker_enabled: bool
+  penalty_worker_interval_seconds: int(15,)
+  push_worker_enabled: bool
+  push_worker_interval_seconds: int(15,)
+  apns_enabled: bool
+  apns_team_id: str?
+  apns_key_id: str?
+  apns_bundle_id: str?
+  apns_private_key: str?
+  apns_private_key_path: str?
