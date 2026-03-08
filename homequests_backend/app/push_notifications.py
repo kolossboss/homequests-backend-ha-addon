@@ -196,10 +196,6 @@ class APNsClient:
             if key_path.exists():
                 return key_path.read_text(encoding="utf-8")
             logger.warning("APNs Key-Datei nicht gefunden unter APNS_PRIVATE_KEY_PATH=%s", path)
-
-        inline = (settings.apns_private_key or "").strip()
-        if inline:
-            return inline.replace("\\n", "\n")
         return None
 
 

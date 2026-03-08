@@ -45,7 +45,6 @@ APNS_ENABLED="$(json_bool '.apns_enabled')"
 APNS_TEAM_ID="$(json_string '.apns_team_id')"
 APNS_KEY_ID="$(json_string '.apns_key_id')"
 APNS_BUNDLE_ID="$(json_string '.apns_bundle_id')"
-APNS_PRIVATE_KEY="$(json_string '.apns_private_key')"
 APNS_PRIVATE_KEY_PATH="$(json_string '.apns_private_key_path')"
 
 if [[ -z "${SECRET_KEY}" ]]; then
@@ -82,7 +81,6 @@ export APNS_ENABLED
 export APNS_TEAM_ID
 export APNS_KEY_ID
 export APNS_BUNDLE_ID
-export APNS_PRIVATE_KEY
 export APNS_PRIVATE_KEY_PATH
 
 echo "[INFO] Starte HomeQuests Backend"

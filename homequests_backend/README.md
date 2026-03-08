@@ -21,7 +21,7 @@ Optional (haeufig):
 - `cors_allow_origins` (`*` oder CSV-Liste)
 - `auth_cookie_secure`
 - `sse_allow_query_token`
-- APNs-Felder (`apns_enabled`, `apns_team_id`, `apns_key_id`, `apns_bundle_id`, `apns_private_key`, `apns_private_key_path`)
+- APNs-Felder (`apns_enabled`, `apns_team_id`, `apns_key_id`, `apns_bundle_id`, `apns_private_key_path`)
 
 ## Empfohlener Start
 
@@ -33,7 +33,6 @@ Optional (haeufig):
 ## APNs Hinweise
 
 - Empfohlen: `apns_private_key_path` auf eine Datei unter `/ssl/...` setzen
-- `apns_private_key` (Inline `.p8` Inhalt) nur als Ausnahme verwenden
 - Das Add-on mountet `/ssl` read-only
 
 Vollstaendige APNs-Schritt-fuer-Schritt-Anleitung:
@@ -45,6 +44,8 @@ Empfehlung: Statt APNs den im Backend integrierten HomeQuests-Kanal `home_assist
 ## Secret-Schluessel
 
 - `secret_key`: Signatur fuer JWT/Session, immer setzen und stabil halten.
+  Im Terminal erzeugen:
+  `openssl rand -base64 48`
 - `secret_encryption_key`: Optionaler separater Verschluesselungsschluessel fuer gespeicherte Secrets.
   Wenn leer, wird automatisch `secret_key` verwendet.
 

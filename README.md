@@ -38,7 +38,6 @@ apns_enabled: false
 apns_team_id: ""
 apns_key_id: ""
 apns_bundle_id: swapps.HomeQuests
-apns_private_key: ""
 apns_private_key_path: ""
 ```
 
@@ -46,16 +45,16 @@ apns_private_key_path: ""
 
 - `secret_key`:
   Signierschluessel fuer Login/JWT. Pflichtwert, lang und zufaellig waehlen.
+  Im Terminal erzeugen:
+  `openssl rand -base64 48`
 - `secret_encryption_key`:
   Optionaler separater Schluessel fuer DB-Secrets (z. B. gespeicherte HA-Tokens).
   Wenn leer, faellt das Backend auf `secret_key` zurueck.
-- `apns_private_key`:
-  Inline-Inhalt der Apple `.p8` Datei (funktioniert, aber nur Notfalloption).
 - `apns_private_key_path`:
   Empfohlener Weg. Pfad zur `.p8` Datei im Dateisystem, z. B.
   `/ssl/homequests/AuthKey_ABC123.p8`.
 
-Empfehlung: Nur `apns_private_key_path` nutzen und `apns_private_key` leer lassen.
+APNs im Add-on ist nur noch ueber `apns_private_key_path` vorgesehen.
 
 ## APNs Anleitung (Hauptrepo)
 

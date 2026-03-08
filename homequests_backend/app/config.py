@@ -17,7 +17,6 @@ class Settings(BaseSettings):
     apns_team_id: str | None = None
     apns_key_id: str | None = None
     apns_bundle_id: str | None = None
-    apns_private_key: str | None = None
     apns_private_key_path: str | None = None
     secret_encryption_key: str | None = None
     push_worker_enabled: bool = True
