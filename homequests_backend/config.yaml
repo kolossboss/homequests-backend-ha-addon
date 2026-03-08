@@ -19,7 +19,7 @@ map:
   - "ssl:ro"
 options:
   app_name: HomeQuests API
-  secret_key: change-this-secret-key-please
+  secret_key: ""
   secret_encryption_key: ""
   database_url: ""
   access_token_expire_minutes: 525600

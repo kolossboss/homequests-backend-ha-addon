@@ -23,7 +23,7 @@ Dieses Repository enthaelt das HomeQuests Backend als Home Assistant Add-on.
 
 ```yaml
 app_name: HomeQuests API
-secret_key: "bitte-einen-langen-secret-key-verwenden"
+secret_key: ""
 secret_encryption_key: ""
 database_url: ""
 access_token_expire_minutes: 525600
