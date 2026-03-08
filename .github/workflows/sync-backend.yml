@@ -61,7 +61,7 @@ jobs:
         if: steps.sync.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.HA_ADDON_AUTOMATION_TOKEN }}
           commit-message: "chore(sync): update backend sources from HomeQuests-backend"
           title: "chore(sync): backend sources aktualisieren"
           body: |
