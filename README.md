@@ -2,6 +2,9 @@
 
 Dieses Repository enthaelt das HomeQuests Backend als Home Assistant Add-on.
 
+Wichtig: Vor dem Push die Platzhalter-URL `REPLACE_ME` in
+`repository.yaml` und `homequests_backend/config.yaml` auf dein GitHub-Repo setzen.
+
 ## Enthaltenes Add-on
 
 - `homequests_backend`: HomeQuests API + WebUI
