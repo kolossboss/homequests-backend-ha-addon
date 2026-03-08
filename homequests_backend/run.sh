@@ -29,12 +29,31 @@ json_int() {
   jq -r "${path} // ${default_value}" "${OPTIONS_FILE}"
 }
 
+normalize_cors_allow_origins() {
+  local raw="$1"
+  local trimmed
+  trimmed="$(printf '%s' "$raw" | sed -E 's/^[[:space:]]+|[[:space:]]+$//g')"
+
+  if [[ -z "${trimmed}" || "${trimmed}" == "*" ]]; then
+    echo '["*"]'
+    return
+  fi
+
+  if [[ "${trimmed}" == \[*\] ]] && printf '%s' "${trimmed}" | jq -e 'type == "array"' >/dev/null 2>&1; then
+    echo "${trimmed}"
+    return
+  fi
+
+  printf '%s' "${trimmed}" | jq -R 'split(",") | map(gsub("^\\s+|\\s+$"; "")) | map(select(length > 0))'
+}
+
 APP_NAME="$(json_string '.app_name')"
 SECRET_KEY="$(json_string '.secret_key')"
 SECRET_ENCRYPTION_KEY="$(json_string '.secret_encryption_key')"
 DATABASE_URL="$(json_string '.database_url')"
 ACCESS_TOKEN_EXPIRE_MINUTES="$(json_int '.access_token_expire_minutes' '525600')"
-CORS_ALLOW_ORIGINS="$(json_string '.cors_allow_origins')"
+CORS_ALLOW_ORIGINS_RAW="$(json_string '.cors_allow_origins')"
+CORS_ALLOW_ORIGINS="$(normalize_cors_allow_origins "${CORS_ALLOW_ORIGINS_RAW}")"
 AUTH_COOKIE_SECURE="$(json_bool '.auth_cookie_secure')"
 SSE_ALLOW_QUERY_TOKEN="$(json_bool '.sse_allow_query_token')"
 PENALTY_WORKER_ENABLED="$(json_bool '.penalty_worker_enabled')"
@@ -59,10 +78,6 @@ fi
 
 if [[ -z "${DATABASE_URL}" ]]; then
   DATABASE_URL="sqlite:////data/homequests.db"
-fi
-
-if [[ -z "${CORS_ALLOW_ORIGINS}" ]]; then
-  CORS_ALLOW_ORIGINS="*"
 fi
 
 export APP_NAME
