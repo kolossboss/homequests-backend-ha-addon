@@ -39,6 +39,7 @@ apns_private_key_path: ""
   `openssl rand -base64 48`
 - `database_url`:
   Optional. Wenn leer, wird automatisch `sqlite:////data/homequests.db` verwendet.
+  Hinweis: Werte mit Host `db` sind fuer Docker Compose gedacht und im HA Add-on normalerweise nicht erreichbar.
 
 ## Benachrichtigungen
 

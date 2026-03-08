@@ -45,6 +45,12 @@ if [[ -z "${DATABASE_URL}" ]]; then
   DATABASE_URL="sqlite:////data/homequests.db"
 fi
 
+if [[ "${DATABASE_URL}" == *"@db:"* ]]; then
+  echo "[WARN] DATABASE_URL verweist auf Host 'db'. In Home Assistant Add-ons ist dieser Host normalerweise nicht erreichbar."
+  echo "[WARN] Fallback auf lokale SQLite-Datenbank /data/homequests.db"
+  DATABASE_URL="sqlite:////data/homequests.db"
+fi
+
 export SECRET_KEY
 export DATABASE_URL
 export APNS_ENABLED
