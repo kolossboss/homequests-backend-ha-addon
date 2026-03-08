@@ -3,79 +3,50 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from sqlalchemy import Engine, text
+from sqlalchemy.engine import Connection
 
 
 MigrationFn = Callable[[Engine], None]
 
 
+def _add_column_if_missing(conn: Connection, table_name: str, column_name: str, column_definition: str) -> None:
+    if conn.dialect.name == "sqlite":
+        table_exists = conn.execute(
+            text(
+                "SELECT 1 FROM sqlite_master WHERE type='table' AND name=:table_name"
+            ),
+            {"table_name": table_name},
+        ).first()
+        if not table_exists:
+            return
+
+        existing_columns = conn.execute(text(f"PRAGMA table_info({table_name})")).mappings().all()
+        if any(column.get("name") == column_name for column in existing_columns):
+            return
+        conn.execute(text(f"ALTER TABLE {table_name} ADD COLUMN {column_definition}"))
+        return
+
+    conn.execute(text(f"ALTER TABLE {table_name} ADD COLUMN IF NOT EXISTS {column_definition}"))
+
+
 def _run_legacy_schema_bootstrap(engine: Engine) -> None:
     with engine.begin() as conn:
-        conn.execute(
-            text(
-                "ALTER TABLE tasks "
-                "ADD COLUMN IF NOT EXISTS recurrence_type VARCHAR(16) NOT NULL DEFAULT 'none'"
-            )
+        _add_column_if_missing(conn, "tasks", "recurrence_type", "VARCHAR(16) NOT NULL DEFAULT 'none'")
+        _add_column_if_missing(conn, "tasks", "reminder_offsets_minutes", "JSON NOT NULL DEFAULT '[]'")
+        _add_column_if_missing(conn, "tasks", "active_weekdays", "JSON NOT NULL DEFAULT '[0,1,2,3,4,5,6]'")
+        _add_column_if_missing(conn, "tasks", "special_template_id", "INTEGER NULL")
+        _add_column_if_missing(conn, "tasks", "is_active", "BOOLEAN NOT NULL DEFAULT TRUE")
+        _add_column_if_missing(conn, "tasks", "penalty_enabled", "BOOLEAN NOT NULL DEFAULT FALSE")
+        _add_column_if_missing(conn, "tasks", "penalty_points", "INTEGER NOT NULL DEFAULT 0")
+        _add_column_if_missing(conn, "tasks", "penalty_last_applied_at", "TIMESTAMP NULL")
+        _add_column_if_missing(
+            conn,
+            "special_task_templates",
+            "active_weekdays",
+            "JSON NOT NULL DEFAULT '[0,1,2,3,4,5,6]'",
         )
-        conn.execute(
-            text(
-                "ALTER TABLE tasks "
-                "ADD COLUMN IF NOT EXISTS reminder_offsets_minutes JSON NOT NULL DEFAULT '[]'"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE tasks "
-                "ADD COLUMN IF NOT EXISTS active_weekdays JSON NOT NULL DEFAULT '[0,1,2,3,4,5,6]'"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE tasks "
-                "ADD COLUMN IF NOT EXISTS special_template_id INTEGER NULL"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE tasks "
-                "ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE tasks "
-                "ADD COLUMN IF NOT EXISTS penalty_enabled BOOLEAN NOT NULL DEFAULT FALSE"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE tasks "
-                "ADD COLUMN IF NOT EXISTS penalty_points INTEGER NOT NULL DEFAULT 0"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE tasks "
-                "ADD COLUMN IF NOT EXISTS penalty_last_applied_at TIMESTAMP NULL"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE special_task_templates "
-                "ADD COLUMN IF NOT EXISTS active_weekdays JSON NOT NULL DEFAULT '[0,1,2,3,4,5,6]'"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE special_task_templates "
-                "ADD COLUMN IF NOT EXISTS due_time_hhmm VARCHAR(5) NULL"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE rewards "
-                "ADD COLUMN IF NOT EXISTS is_shareable BOOLEAN NOT NULL DEFAULT FALSE"
-            )
-        )
+        _add_column_if_missing(conn, "special_task_templates", "due_time_hhmm", "VARCHAR(5) NULL")
+        _add_column_if_missing(conn, "rewards", "is_shareable", "BOOLEAN NOT NULL DEFAULT FALSE")
         if engine.dialect.name == "postgresql":
             conn.execute(text("ALTER TABLE users ALTER COLUMN email DROP NOT NULL"))
             conn.execute(
@@ -138,22 +109,12 @@ def _run_legacy_schema_bootstrap(engine: Engine) -> None:
 
 def _add_task_always_submittable_column(engine: Engine) -> None:
     with engine.begin() as conn:
-        conn.execute(
-            text(
-                "ALTER TABLE tasks "
-                "ADD COLUMN IF NOT EXISTS always_submittable BOOLEAN NOT NULL DEFAULT FALSE"
-            )
-        )
+        _add_column_if_missing(conn, "tasks", "always_submittable", "BOOLEAN NOT NULL DEFAULT FALSE")
 
 
 def _add_user_ha_notify_service_column(engine: Engine) -> None:
     with engine.begin() as conn:
-        conn.execute(
-            text(
-                "ALTER TABLE users "
-                "ADD COLUMN IF NOT EXISTS ha_notify_service VARCHAR(255) NULL"
-            )
-        )
+        _add_column_if_missing(conn, "users", "ha_notify_service", "VARCHAR(255) NULL")
 
 
 def _create_home_assistant_settings_table(engine: Engine) -> None:
@@ -192,42 +153,17 @@ def _create_home_assistant_settings_table(engine: Engine) -> None:
 
 def _add_home_assistant_channel_and_user_prefs(engine: Engine) -> None:
     with engine.begin() as conn:
-        conn.execute(
-            text(
-                "ALTER TABLE home_assistant_settings "
-                "ADD COLUMN IF NOT EXISTS notification_channel VARCHAR(32) NOT NULL DEFAULT 'sse'"
-            )
+        _add_column_if_missing(
+            conn,
+            "home_assistant_settings",
+            "notification_channel",
+            "VARCHAR(32) NOT NULL DEFAULT 'sse'",
         )
-        conn.execute(
-            text(
-                "ALTER TABLE users "
-                "ADD COLUMN IF NOT EXISTS ha_notifications_enabled BOOLEAN NOT NULL DEFAULT FALSE"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE users "
-                "ADD COLUMN IF NOT EXISTS ha_child_new_task BOOLEAN NOT NULL DEFAULT TRUE"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE users "
-                "ADD COLUMN IF NOT EXISTS ha_manager_task_submitted BOOLEAN NOT NULL DEFAULT TRUE"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE users "
-                "ADD COLUMN IF NOT EXISTS ha_manager_reward_requested BOOLEAN NOT NULL DEFAULT TRUE"
-            )
-        )
-        conn.execute(
-            text(
-                "ALTER TABLE users "
-                "ADD COLUMN IF NOT EXISTS ha_task_due_reminder BOOLEAN NOT NULL DEFAULT TRUE"
-            )
-        )
+        _add_column_if_missing(conn, "users", "ha_notifications_enabled", "BOOLEAN NOT NULL DEFAULT FALSE")
+        _add_column_if_missing(conn, "users", "ha_child_new_task", "BOOLEAN NOT NULL DEFAULT TRUE")
+        _add_column_if_missing(conn, "users", "ha_manager_task_submitted", "BOOLEAN NOT NULL DEFAULT TRUE")
+        _add_column_if_missing(conn, "users", "ha_manager_reward_requested", "BOOLEAN NOT NULL DEFAULT TRUE")
+        _add_column_if_missing(conn, "users", "ha_task_due_reminder", "BOOLEAN NOT NULL DEFAULT TRUE")
         conn.execute(
             text(
                 "UPDATE users SET ha_notifications_enabled = TRUE "
