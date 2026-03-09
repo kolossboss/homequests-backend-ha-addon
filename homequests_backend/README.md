@@ -9,6 +9,11 @@ Dieses Add-on startet das HomeQuests Backend inklusive WebUI direkt in Home Assi
 - API-Dokumentation unter `/docs`
 - Persistente lokale SQLite-Datenbank ohne externe Abhaengigkeiten
 
+## Changelog
+
+- Der in Home Assistant angezeigte Changelog kommt aus [CHANGELOG.md](./CHANGELOG.md).
+- Diese Datei wird automatisch aus der `CHANGELOG.md` im Backend-Repository synchronisiert.
+
 ## Konfiguration
 
 Pflicht:

@@ -33,8 +33,13 @@ jobs:
 
           rsync -a --delete /tmp/homequests-backend-src/app/ homequests_backend/app/
           cp /tmp/homequests-backend-src/requirements.txt homequests_backend/requirements.txt
+          if [ -f /tmp/homequests-backend-src/CHANGELOG.md ]; then
+            cp /tmp/homequests-backend-src/CHANGELOG.md homequests_backend/CHANGELOG.md
+          else
+            rm -f homequests_backend/CHANGELOG.md
+          fi
 
-          if git diff --quiet -- homequests_backend/app homequests_backend/requirements.txt; then
+          if git diff --quiet -- homequests_backend/app homequests_backend/requirements.txt homequests_backend/CHANGELOG.md; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -74,6 +79,7 @@ jobs:
             Geaenderte Bereiche:
             - `homequests_backend/app/**`
             - `homequests_backend/requirements.txt`
+            - `homequests_backend/CHANGELOG.md` (synchronisiert aus Backend)
             - `homequests_backend/config.yaml` (Version automatisch erhoeht)
           branch: "automation/backend-sync"
           delete-branch: true
