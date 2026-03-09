@@ -23,4 +23,4 @@ jobs:
             echo "Fork PR erkannt - Auto-Merge wird aus Sicherheitsgruenden uebersprungen."
             exit 0
           fi
-          gh pr merge "$PR_NUMBER" --auto --squash --delete-branch
+          gh pr merge "$PR_NUMBER" --repo "$BASE_REPO" --auto --squash --delete-branch
